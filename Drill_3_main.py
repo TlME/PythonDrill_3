@@ -3,19 +3,22 @@
 # then moves them to a target folder without preserving file-structure.
 # by Nick Henegar
 
+
 import os
 import shutil
 import time
 
+#this ended up breaking it for some reason.
 def traverse(src, dst, currentTime):
     children = os.listdir(src)
-    while children != []:
-        for child in children:
-            recently_modified = ((currentTime - os.stat(src + child).st_mtime) <= 86400) 
-            if child.endswith(".txt") and recently_modified:
-                shutil.move(src + child, dst)
-            else:
-                traverse(src + child + "\\", dst, currentTime)
+    for child in children:
+        recently_modified = ((currentTime - os.stat(src + child).st_mtime) <= 86400) 
+        if child.endswith(".txt") and recently_modified:
+            shutil.move(src + child, dst)
+        elif child[-4:] == '.txt'and not recently_modified:
+            pass
+        else:
+            traverse(src + child + "\\", dst, currentTime)
             
 def main():
     src = 'H:\\Python27\\Python stuff\\Python Drills\\PythonDrill_3\\Folder A\\'
